@@ -1,0 +1,49 @@
+FOURNISSEUR SOMAF ;;;
+Arcs;Tronçons;Longueurs (Km);Caractéristiques
+X1-X2;T1;1,429;Revêtue, zone urbaine, moyen état
+;T2;1,946;Revêtue, zone urbaine, moyen état
+;T3;1,068;Revêtue, zone urbaine, moyen état
+X2-X5;T1;2,129;Revêtue, zone rurale, bon état
+;T2;4,139;Revêtue, zone rurale, bon état
+;T3;3,846;Revêtue, zone urbaine, bon état
+X5-X8;T1;1,298;Revêtue, zone urbaine, bon état
+;T2;1,263;Revêtue, zone rurale, bon état
+;T3;0,34;Revêtue, zone rurale, bon état
+;T4;2,335;Revêtue, zone rurale, bon état
+;T5;1,143;Revêtue, zone rurale, bon état
+;T6;4,229;En terre, zone rurale, moyen état
+;T7;2,691;En terre, zone rurale, moyen état
+X8-X9;T1;0,921;En terre, zone rurale, moyen état
+FOURNISSEUR HELENE;;;
+Arcs;Tronçons;Longueurs (Km);Caractéristiques
+X1-X2;T1;0,803;Revêtue, zone urbaine, moyen état
+X2-X3;T1;1,467;Revêtue, zone urbaine, moyen état
+;T2;1,65;Revêtue, zone urbaine, moyen état
+;T3;1,906;Revêtue, zone urbaine, moyen état
+;T4;4,079;Revêtue, zone urbaine, moyen état
+X3-X5;T1;5,042;Revêtue, zone urbaine, mauvais état
+;T2;3,097;Revêtue, zone urbaine, mauvais état
+;T3;2,764;Revêtue, zone urbaine, moyen état
+X5-X7;T1;2,69;Revêtue, zone urbaine, moyen état
+;T2;1,304;Revêtue, zone urbaine, mauvais état
+X7-X8;T1;1,28;Revêtue, zone rurale, bon état
+;T2;0,832;En terre, zone rurale, moyen état
+;T3;0,061;En terre, zone rurale, moyen état
+FOURNISSEUR CMCC ;;;
+Arcs;Tronçons;Longueurs (Km);Caractéristiques
+X1-X2;T1;0,421;Revêtue, zone urbaine, moyen état
+;T2;0,953;Revêtue, zone urbaine, bon état
+;T3;1,415;Revêtue, zone urbaine, moyen état
+;T4;1,149;Revêtue, zone urbaine, moyen état
+X2-X3;T1;1,417;Revêtue, zone urbaine, bon état
+;T2;1,014;Revêtue, zone urbaine, moyen état
+;T3;1,093;Revêtue, zone urbaine, moyen état
+X3-X4;T1;1,2;Revêtue, zone urbaine, moyen état
+X4-X5;T1;4,116;Revêtue, zone urbaine, mauvais état
+;T2;3,137;Revêtue, zone urbaine, mauvais état
+X5-X7;T1;1,858;Revêtue, zone urbaine, moyen état
+;T2;5,852;Revêtue, zone urbaine, moyen état
+;T3;2,691;Revêtue, zone urbaine, mauvais état
+X7-X9;T1;1,296;Revêtue, zone rurale, bon état
+;T2;1,293;En terre, zone rurale, moyen état
+;T3;0,892;En terre, zone rurale, moyen état

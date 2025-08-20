@@ -1,0 +1,14 @@
+RECAPITULATIF DES RESULTATS;;;
+Fournisseurs;CMCC (F1);SAINTE HELENE  (F3);SOMAF (F4)
+Quantité disponible pour la période Qi  (m3);76;66;86
+Temps ;;;
+;;;
+"Ensemble Retenu ={F1; F4}";;;
+;;;
+;;;
+;;;
+commentaire;j'ai déjà essayé d'évaluer mes 4 fournisseurs que j'avais. De cette évaluation voici les trois qui ont été retenus. Puis leur temps de transport respectif seront calculés. Ensuite le gestionnaire entre les quantités disponibles pour chaque fournisseur pour la période puisque il les contacte. Enfin on fait donc un tri multicritère pour déterminer la combinaison répondant à l'objectif ci-après. Le résultat à afficher est le tableau + l'ensemble definitif ;;
+;;;
+;;;
+;;;
+;;;

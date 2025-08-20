@@ -1,0 +1,28 @@
+L'objectif est de faire une simulation assez simple, qui suit à peut pret l'idée presentée dans le logigramme
+
+la simulation demande à l'utilisateur d'entrer certaines informations comme 
+- La demande, la date de livraison
+
+Ceci sachant que les informations sur les fournisseurs sont déja là (localisation et stocks)
+
+On peut aussi, au besoin proposer à l'utilisateur de localiser sur une carte, les positions des fournisseurs et du chantier.
+
+Ensuite, la premiere etape du processus est l'valuation des fournisseurs (à partir des scores data/evaluation des fournisseurs)
+on trie ainsi les les founisseur sur ce score là
+
+La seconde etape est celle de l'estimation du temps de transport, pour chaque fournisseur, (comme le logigramme le dit) et fenetre de livraison pour chaque fournisseur
+
+ensuite on fait une optimisation combinatoire, le but est de ressortir le ou les fournisseurs qui permettront de satifaire au mieux la demande (quantité demandée peut etre composée par association de plusieurs fournisseurs) mais aussi en minimisant le temps de livraison tout en maximisant le score de qualité (évaluation)
+
+à la fin, on ressort pour chaque founisseur choisit, l'itinéraire (tracé sur la carte) qu'il doit enprunter, le temps pour cet itinéraire là, ainsi que la quantité qu'on attend de lui.
+
+
+L'estimation du temps de transport devrait se faire suivant la proposition du fichier doc/estimation du temps d trajet... mais pour un début, on peut prendre (pour cette simulation) un algorithme de routage bien conçu déja existant...
+
+l'esemble doit etre extrement simple, on doit pouvoir faire un déploiement vercel facilement (je ne pense pas qu'une base de donénes soit necessaire ou meme un backend sérieux) 
+
+les interfaces doivent etre belles et intuitives. Style Jony Ive simple épuré, tu choisira 2 ou 3 couleurs, et tu agencera correctement avec une dominance blanche et de simple animations. 
+
+Je veux une sorte de PoC:  c'est une simulation.... 
+
+Commence par récapituler le TAF, consulte la documentation (dossier /doc) mais aussi les données (dossier /data) et reviens moi avec ce que tu as compris, on discutera d'abord de ce qu'il y à faire (cahier de charges) avant de voir comment implementer !

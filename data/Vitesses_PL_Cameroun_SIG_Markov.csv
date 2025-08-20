@@ -1,0 +1,42 @@
+Table des vitesses suivant les différents états et l'état de dégradation de la route;;;;;
+Milieu;Etat de dégradation de la route;Etats;Vmin (km/h);Vmax (km/h);Vmoy (km/h)
+Urbain;Bon état;Fluide Sec;25;30;27,5
+;;Dense Sec;18;22;20
+;;Embouteillé Sec;9;11;10
+;;Fluide Pluvieux;23;27;25
+;;Dense Pluvieux;15;20;17,5
+;;Embouteillé Pluvieux;5;10;7,5
+;Moyen état;Fluide Sec;24;28;26
+;;Dense Sec;14;20;17
+;;Embouteillé Sec;6;10;8
+;;Fluide Pluvieux;18;22;20
+;;Dense Pluvieux;11;15;13
+;;Embouteillé Pluvieux;5;7;6
+;Mauvais état;Fluide Sec;15;20;17,5
+;;Dense Sec;10;17;13,5
+;;Embouteillé Sec;5;9;7
+;;Fluide Pluvieux;10;16;13
+;;Dense Pluvieux;7;11;9
+;;Embouteillé Pluvieux;3;5;4
+Rase campagne;Bon état;Fluide Sec;45;50;47,5
+;;Dense Sec;35;40;37,5
+;;Embouteillé Sec;15;20;17,5
+;;Fluide Pluvieux;40;47;43,5
+;;Dense Pluvieux;27;35;31
+;;Embouteillé Pluvieux;9;18;13,5
+;Moyen état;Fluide Sec;35;45;40
+;;Dense Sec;30;40;35
+;;Embouteillé Sec;10;18;14
+;;Fluide Pluvieux;38;45;41,5
+;;Dense Pluvieux;22;30;26
+;;Embouteillé Pluvieux;8;15;11,5
+;Mauvais état;Fluide Sec;20;30;25
+;;Dense Sec;18;25;21,5
+;;Embouteillé Sec;5;10;7,5
+;;Fluide Pluvieux;20;30;25
+;;Dense Pluvieux;10;18;14
+;;Embouteillé Pluvieux;5;10;7,5
+;;;;;
+Intervalle de temps (sensibilité);;;;;
+Temps min (minutes, sur V_max);;;;;
+Temps max (minutes, sur V_min);;;;;
