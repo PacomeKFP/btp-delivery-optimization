@@ -5,14 +5,14 @@ const Step1_Input = ({ onNext, initialData = {} }) => {
   const [formData, setFormData] = useState({
     demand: initialData.demand || '',
     deliveryDate: initialData.deliveryDate || '',
+    arrivalTime: initialData.arrivalTime || '',
     materialType: initialData.materialType || 'concrete',
-    priority: initialData.priority || 'balanced',
     ...initialData
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (formData.demand && formData.deliveryDate) {
+    if (formData.demand && formData.deliveryDate && formData.arrivalTime) {
       onNext(formData);
     }
   };
@@ -69,6 +69,20 @@ const Step1_Input = ({ onNext, initialData = {} }) => {
           </div>
         </div>
 
+        {/* Heure d'arrivée souhaitée */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Heure d'arrivée souhaitée *
+          </label>
+          <input
+            type="time"
+            value={formData.arrivalTime}
+            onChange={(e) => handleChange('arrivalTime', e.target.value)}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+            required
+          />
+        </div>
+
         {/* Type de matériau */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -79,50 +93,18 @@ const Step1_Input = ({ onNext, initialData = {} }) => {
             onChange={(e) => handleChange('materialType', e.target.value)}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
           >
-            <option value="concrete">Béton</option>
+            <option value="concrete">Béton prêt à l'emploi</option>
             <option value="aggregates">Granulats</option>
             <option value="cement">Ciment</option>
           </select>
         </div>
 
-        {/* Priorité */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-4">
-            Priorité de sélection
-          </label>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { id: 'quality', label: 'Qualité prioritaire', desc: 'Privilégier la qualité des matériaux' },
-              { id: 'time', label: 'Délai prioritaire', desc: 'Livraison la plus rapide possible' },
-              { id: 'cost', label: 'Coût prioritaire', desc: 'Minimiser les coûts' }
-            ].map((option) => (
-              <label key={option.id} className="cursor-pointer">
-                <input
-                  type="radio"
-                  name="priority"
-                  value={option.id}
-                  checked={formData.priority === option.id}
-                  onChange={(e) => handleChange('priority', e.target.value)}
-                  className="sr-only"
-                />
-                <div className={`p-4 border-2 rounded-lg transition-all ${
-                  formData.priority === option.id
-                    ? 'border-primary-500 bg-primary-50'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}>
-                  <div className="font-medium text-gray-800">{option.label}</div>
-                  <div className="text-sm text-gray-600 mt-1">{option.desc}</div>
-                </div>
-              </label>
-            ))}
-          </div>
-        </div>
 
         {/* Bouton suivant */}
         <div className="flex justify-end pt-6">
           <button
             type="submit"
-            disabled={!formData.demand || !formData.deliveryDate}
+            disabled={!formData.demand || !formData.deliveryDate || !formData.arrivalTime}
             className="px-8 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all font-medium"
           >
             Suivant →

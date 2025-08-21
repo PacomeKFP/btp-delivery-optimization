@@ -123,7 +123,7 @@ const InteractiveMap = ({
                 <div className="space-y-1 text-sm">
                   <p><strong>Localisation:</strong> {supplier.location}</p>
                   <p><strong>Capacité:</strong> {supplier.capacity} m³/h</p>
-                  <p><strong>Stock:</strong> {supplier.stock} m³</p>
+                  <p><strong>Qté disponible:</strong> {supplier.stock} m³</p>
                   <p><strong>Coût:</strong> {supplier.costPerM3.toLocaleString()} FCFA/m³</p>
                 </div>
               </div>

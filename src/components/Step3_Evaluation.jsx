@@ -156,20 +156,12 @@ const Step3_Evaluation = ({ onNext, onPrevious, initialData = {} }) => {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div className="text-sm">
                       <div>
                         <h5 className="font-medium text-green-700 mb-1">Points forts:</h5>
                         <ul className="text-green-600 space-y-1">
                           {strengths.strengths.map((strength, i) => (
                             <li key={i}>• {strength}</li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div>
-                        <h5 className="font-medium text-orange-700 mb-1">À améliorer:</h5>
-                        <ul className="text-orange-600 space-y-1">
-                          {strengths.weaknesses.map((weakness, i) => (
-                            <li key={i}>• {weakness}</li>
                           ))}
                         </ul>
                       </div>

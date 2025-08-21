@@ -47,7 +47,8 @@ const Step4_TimeEstimation = ({ onNext, onPrevious, initialData = {} }) => {
         supplierCoord,
         constructionCoord,
         deliveryDate,
-        season
+        season,
+        initialData.arrivalTime
       );
       
       estimations[supplier.id] = {
@@ -78,12 +79,14 @@ const Step4_TimeEstimation = ({ onNext, onPrevious, initialData = {} }) => {
   const prepareTimeChartData = () => {
     if (!selectedSupplier || !timeEstimations[selectedSupplier]) return [];
     
-    return timeEstimations[selectedSupplier].deliveryWindows.allWindows.map(window => ({
-      hour: `${window.departureHour}h`,
-      temps: window.averageTime,
-      min: window.minTime,
-      max: window.maxTime
-    }));
+    return timeEstimations[selectedSupplier].deliveryWindows.allWindows
+      .sort((a, b) => a.departureHour - b.departureHour)
+      .map(window => ({
+        hour: `${window.departureHour}h`,
+        temps: window.averageTime,
+        min: window.minTime,
+        max: window.maxTime
+      }));
   };
 
   const prepareComparisonData = () => {
@@ -121,10 +124,8 @@ const Step4_TimeEstimation = ({ onNext, onPrevious, initialData = {} }) => {
                 <h3 className="font-semibold text-blue-800 mb-3">Facteurs considérés :</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-blue-700 text-sm">
                   <div>• État du trafic (Fluide/Dense/Embouteillé)</div>
-                  <div>• Conditions météorologiques</div>
-                  <div>• Type de zone (Urbaine/Rurale)</div>
-                  <div>• Heures de pointe/creuses</div>
-                  <div>• Saison (Sèche/Pluvieuse)</div>
+                  <div>• Géolocalisation (zone urbaine, zone rurale)</div>
+                  <div>• Conditions météorologiques (sec/pluvieux)</div>
                   <div>• Distance réelle</div>
                 </div>
               </div>

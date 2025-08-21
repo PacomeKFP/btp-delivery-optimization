@@ -5,56 +5,60 @@ export const suppliersData = [
     name: 'CMCC',
     fullName: 'CMCC (F1)',
     capacity: 50, // m3/h
-    truckCapacity: 76, // m3
+    truckCapacity10: 10, // m3 - Camion toupie 10m³
+    truckCapacity8: 8, // m3 - Camion toupie 8m³
     costPerM3: 108000, // FCFA
     pumpCost: 7000, // FCFA/m3
     quality: 'ISO 9001, Certifications sur les matériaux',
     location: 'Etoa Maki',
     coordinates: [3.8480, 11.5021], // Yaoundé area
     stock: 500, // m3 available
-    color: '#3B82F6' // Blue
+    color: '#2563eb' // Blue
   },
   {
     id: 'F2',
     name: 'BCC',
     fullName: 'BCC (F2)',
     capacity: 50,
-    truckCapacity: 56,
+    truckCapacity10: 10,
+    truckCapacity8: 8,
     costPerM3: 109000,
     pumpCost: 10000,
     quality: 'ISO 9001, Certifications sur les matériaux',
     location: 'Olembé',
     coordinates: [3.8680, 11.5221],
     stock: 400,
-    color: '#EF4444' // Red
+    color: '#ea580c' // Orange
   },
   {
     id: 'F3',
     name: 'SAINTE HELENE',
     fullName: 'SAINTE HELENE (F3)',
     capacity: 45,
-    truckCapacity: 66,
+    truckCapacity10: 10,
+    truckCapacity8: 8,
     costPerM3: 105000,
     pumpCost: 6500,
     quality: 'ISO 9001, Certifications sur les matériaux',
     location: 'Nouvelle route Mvan',
     coordinates: [3.8280, 11.4821],
     stock: 350,
-    color: '#10B981' // Green
+    color: '#3b82f6' // Blue variant
   },
   {
     id: 'F4',
     name: 'SOMAF',
     fullName: 'SOMAF (F4)',
     capacity: 200,
-    truckCapacity: 86,
+    truckCapacity10: 10,
+    truckCapacity8: 8,
     costPerM3: 110000,
     pumpCost: 8000,
     quality: 'ISO 9001, Certifications sur les matériaux',
     location: 'Nomayos',
     coordinates: [3.8780, 11.5421],
     stock: 800,
-    color: '#F59E0B' // Yellow
+    color: '#f97316' // Orange variant
   }
 ];
 

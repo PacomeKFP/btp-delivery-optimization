@@ -210,14 +210,24 @@ export class SupplyOptimizer {
         globalScore = (qualityScore + timeScore + costScore) * 0.3 + satisfactionRate * 0.1;
     }
     
-    // Calculer les livraisons nécessaires
+    // Calculer les livraisons nécessaires avec logique toupies 10m³ et 8m³
     const deliveries = combination.map(supplier => {
-      const numDeliveries = Math.ceil(supplier.allocatedQuantity / supplier.truckCapacity);
+      const quantity = supplier.allocatedQuantity;
+      
+      // Calcul optimisé: priorité aux camions 10m³, complément avec 8m³
+      const trucks10 = Math.floor(quantity / 10);
+      const remaining = quantity - (trucks10 * 10);
+      const trucks8 = remaining > 0 ? Math.ceil(remaining / 8) : 0;
+      
+      const numDeliveries = trucks10 + trucks8;
+      
       return {
         supplierId: supplier.id,
         supplierName: supplier.name,
         quantity: supplier.allocatedQuantity,
         numDeliveries,
+        trucks10Count: trucks10,
+        trucks8Count: trucks8,
         deliveryTime: supplier.timeData.averageTime,
         optimalDeparture: supplier.timeData.optimalDeparture
       };
@@ -268,9 +278,12 @@ export class SupplyOptimizer {
       recommendations.push("Temps de livraison important - planifier en conséquence");
     }
     
-    const totalDeliveries = combination.reduce((sum, s) => 
-      sum + Math.ceil(s.allocatedQuantity / s.truckCapacity), 0
-    );
+    const totalDeliveries = combination.reduce((sum, s) => {
+      const trucks10 = Math.floor(s.allocatedQuantity / 10);
+      const remaining = s.allocatedQuantity - (trucks10 * 10);
+      const trucks8 = remaining > 0 ? Math.ceil(remaining / 8) : 0;
+      return sum + trucks10 + trucks8;
+    }, 0);
     
     if (totalDeliveries > 10) {
       recommendations.push(`${totalDeliveries} livraisons nécessaires - coordonner la logistique`);

@@ -57,7 +57,8 @@ const Step6_Results = ({ onRestart, initialData = {} }) => {
         coutParM3: formatCurrency(Math.round(selectedSolution.costPerM3)),
         tempsMax: formatTime(selectedSolution.maxDeliveryTime),
         niveauRisque: selectedSolution.riskLevel,
-        scoreGlobal: (selectedSolution.globalScore * 100).toFixed(1) + '%'
+        scoreGlobal: (selectedSolution.globalScore * 100).toFixed(1) + '%',
+        scoreExplanation: 'Score composite basé sur la qualité AHP, temps de transport et coût'
       },
       fournisseurs: selectedSolution.combination.map(supplier => ({
         nom: supplier.name,
@@ -117,8 +118,8 @@ const Step6_Results = ({ onRestart, initialData = {} }) => {
                 <div className="text-green-100 text-sm">Temps max</div>
               </div>
               <div>
-                <div className="text-2xl font-bold">{formatCurrency(Math.round(selectedSolution.costPerM3))}/m³</div>
-                <div className="text-green-100 text-sm">Coût moyen</div>
+                <div className="text-2xl font-bold">{(selectedSolution.globalScore * 100).toFixed(1)}%</div>
+                <div className="text-green-100 text-sm" title="Score composite basé sur la qualité AHP, temps de transport et coût">Score global ℹ️</div>
               </div>
             </div>
           </div>
@@ -366,7 +367,9 @@ const Step6_Results = ({ onRestart, initialData = {} }) => {
                       <div>
                         <div className="text-sm text-gray-500">Livraisons</div>
                         <div className="text-xl font-bold">{delivery?.numDeliveries || 0}</div>
-                        <div className="text-sm text-gray-600">Camions de {supplier.truckCapacity}m³</div>
+                        <div className="text-sm text-gray-600">
+                          {delivery?.trucks10Count || 0} × 10m³ + {delivery?.trucks8Count || 0} × 8m³
+                        </div>
                       </div>
                     </div>
                     
@@ -376,7 +379,7 @@ const Step6_Results = ({ onRestart, initialData = {} }) => {
                           <span className="font-medium">Capacité production:</span> {supplier.capacity} m³/h
                         </div>
                         <div>
-                          <span className="font-medium">Stock disponible:</span> {supplier.stock} m³
+                          <span className="font-medium">Qté disponible:</span> {supplier.stock} m³
                         </div>
                         <div>
                           <span className="font-medium">Distance:</span> ~{supplier.timeData.distance} km

@@ -190,7 +190,7 @@ export class TransportEstimator {
   }
 
   // Estimer les fenêtres de livraison optimales
-  findOptimalDeliveryWindow(supplierCoord, constructionCoord, deliveryDate, season = 'dry') {
+  findOptimalDeliveryWindow(supplierCoord, constructionCoord, deliveryDate, season = 'dry', targetArrivalTime = null) {
     const windows = [];
     
     // Tester différentes heures de départ
@@ -203,29 +203,56 @@ export class TransportEstimator {
         50 // Moins de simulations pour plus de rapidité
       );
       
+      const arrivalHour = hour + Math.ceil(estimation.averageTime / 60);
+      
       windows.push({
         departureHour: hour,
-        arrivalHour: hour + Math.ceil(estimation.averageTime / 60),
+        arrivalHour: arrivalHour,
         ...estimation
       });
     }
     
-    // Trier par temps moyen
-    windows.sort((a, b) => a.averageTime - b.averageTime);
+    // Si une heure d'arrivée cible est spécifiée, trouver l'heure de départ optimale
+    let optimal = windows[0];
+    if (targetArrivalTime) {
+      const targetHour = parseInt(targetArrivalTime.split(':')[0]);
+      const targetMinute = parseInt(targetArrivalTime.split(':')[1]);
+      const targetDecimal = targetHour + targetMinute / 60;
+      
+      // Trouver le créneau qui arrive le plus proche de l'heure cible
+      let minDifference = Infinity;
+      for (const window of windows) {
+        const arrivalDecimal = window.arrivalHour;
+        const difference = Math.abs(arrivalDecimal - targetDecimal);
+        
+        if (difference < minDifference) {
+          minDifference = difference;
+          optimal = window;
+        }
+      }
+    } else {
+      // Trier par temps moyen si pas d'heure cible
+      windows.sort((a, b) => a.averageTime - b.averageTime);
+      optimal = windows[0];
+    }
     
     return {
-      optimal: windows[0],
+      optimal: optimal,
       allWindows: windows,
-      recommendations: this.generateRecommendations(windows)
+      recommendations: this.generateRecommendations(windows, targetArrivalTime)
     };
   }
 
   // Générer des recommandations
-  generateRecommendations(windows) {
+  generateRecommendations(windows, targetArrivalTime = null) {
     const best = windows[0];
     const worst = windows[windows.length - 1];
     
     const recommendations = [];
+    
+    if (targetArrivalTime) {
+      recommendations.push(`Heure de départ calculée pour arriver vers ${targetArrivalTime}`);
+    }
     
     if (best.departureHour <= 7) {
       recommendations.push("Départ tôt le matin recommandé pour éviter les embouteillages");
