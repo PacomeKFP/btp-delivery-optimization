@@ -58,19 +58,24 @@ const ResultsMap = ({
   
   const selectedSupplierIds = selectedSolution?.combination.map(s => s.id) || [];
   
-  // Générer des routes simplifiées (en réalité, on utiliserait une API de routage)
-  const generateRoute = (start, end) => {
-    // Route simplifiée - en réalité on utiliserait Google Directions API ou similaire
+  // Utiliser les vraies routes depuis les données de simulation
+  const getRealRoute = (supplier) => {
+    const timeData = supplier.timeData;
+    if (timeData?.realRoute?.coordinates) {
+      return timeData.realRoute.coordinates;
+    }
+    
+    // Fallback vers route simplifiée si pas de données réelles
+    const start = supplier.coordinates;
+    const end = [constructionSite.lat, constructionSite.lng];
     const latDiff = end[0] - start[0];
     const lngDiff = end[1] - start[1];
     
-    // Créer quelques points intermédiaires pour simuler une route
     const numPoints = 5;
     const route = [];
     
     for (let i = 0; i <= numPoints; i++) {
       const ratio = i / numPoints;
-      // Ajouter un peu de courbe pour rendre la route plus réaliste
       const curveFactor = Math.sin(ratio * Math.PI) * 0.01;
       
       route.push([
@@ -199,10 +204,8 @@ const ResultsMap = ({
         {showRoutes && constructionSite && selectedSolution && (
           <>
             {selectedSolution.combination.map((supplier, index) => {
-              const route = generateRoute(
-                supplier.coordinates,
-                [constructionSite.lat, constructionSite.lng]
-              );
+              const route = getRealRoute(supplier);
+              const isRealRoute = supplier.timeData?.realRoute?.coordinates;
               
               return (
                 <Polyline
@@ -211,15 +214,18 @@ const ResultsMap = ({
                   color={supplier.color}
                   weight={4}
                   opacity={0.8}
-                  dashArray="5, 5"
+                  dashArray={isRealRoute ? null : "5, 5"}
                 >
                   <Popup>
                     <div className="text-center">
                       <h4 className="font-bold">{supplier.name} → Chantier</h4>
                       <div className="text-sm mt-2">
-                        <div>Distance: ~{supplier.timeData?.distance || 0} km</div>
+                        <div>Distance: {supplier.timeData?.distance || 0} km</div>
                         <div>Temps: {formatTime(supplier.timeData?.averageTime || 0)}</div>
                         <div>Quantité: {supplier.allocatedQuantity} m³</div>
+                        <div className={isRealRoute ? "text-green-600" : "text-orange-500"}>
+                          {isRealRoute ? "Route réelle (OSRM)" : "Route approximative"}
+                        </div>
                       </div>
                     </div>
                   </Popup>

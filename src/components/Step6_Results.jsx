@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { CheckCircle, Download, Share2, MapPin, Clock, DollarSign, Truck } from 'lucide-react';
+import { CheckCircle, Download, Share2, MapPin, Clock, DollarSign, Truck, FileText } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import ResultsMap from './ResultsMap';
+import { generateSimulationReport } from '../utils/pdfGenerator';
 
 const Step6_Results = ({ onRestart, initialData = {} }) => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -83,6 +84,30 @@ const Step6_Results = ({ onRestart, initialData = {} }) => {
     linkElement.click();
   };
 
+  const generatePDFReport = async () => {
+    try {
+      // Préparer les données pour le PDF
+      const simulationData = {
+        demand: initialData.demand,
+        materialType: initialData.materialType === 'concrete' ? 'Béton prêt à l\'emploi' : initialData.materialType,
+        deliveryDate: initialData.deliveryDate,
+        arrivalTime: initialData.arrivalTime,
+        selectedSolution
+      };
+      
+      // Générer le PDF
+      const generator = await generateSimulationReport(simulationData);
+      
+      // Télécharger
+      const filename = `rapport-simulation-${new Date().toISOString().split('T')[0]}.pdf`;
+      await generator.generateAndDownload(filename);
+      
+    } catch (error) {
+      console.error('Erreur lors de la génération du PDF:', error);
+      alert('Erreur lors de la génération du rapport PDF. Veuillez réessayer.');
+    }
+  };
+
   const tabs = [
     { id: 'overview', name: 'Vue d\'ensemble', icon: CheckCircle },
     { id: 'map', name: 'Carte', icon: MapPin },
@@ -126,11 +151,18 @@ const Step6_Results = ({ onRestart, initialData = {} }) => {
           
           <div className="flex space-x-3">
             <button
+              onClick={generatePDFReport}
+              className="flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-all"
+            >
+              <FileText className="w-4 h-4" />
+              <span>Rapport PDF</span>
+            </button>
+            <button
               onClick={generateReport}
               className="flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-all"
             >
               <Download className="w-4 h-4" />
-              <span>Télécharger</span>
+              <span>Données JSON</span>
             </button>
             <button className="flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-all">
               <Share2 className="w-4 h-4" />

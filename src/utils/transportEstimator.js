@@ -1,3 +1,5 @@
+import { routingService } from './routingService.js';
+
 // Estimateur de temps de transport basé sur les chaînes de Markov
 export class TransportEstimator {
   constructor() {
@@ -92,11 +94,14 @@ export class TransportEstimator {
     return this.transitionMatrices[`urban_${season}_${period}`];
   }
 
-  // Simulation Monte Carlo pour estimer le temps de trajet
-  simulateTransportTime(supplierCoord, constructionCoord, hour = 8, season = 'dry', numSimulations = 100) {
-    const distance = this.calculateDistance(supplierCoord, constructionCoord);
-    const transitionMatrix = this.getTransitionMatrix(supplierCoord, constructionCoord, hour, season);
+  // Simulation Monte Carlo pour estimer le temps de trajet avec routes réelles
+  async simulateTransportTime(supplierCoord, constructionCoord, hour = 8, season = 'dry', numSimulations = 100) {
+    // Obtenir la route réelle
+    const realRoute = await routingService.getRealRoute(supplierCoord, constructionCoord);
+    const distance = realRoute.distance;
+    const baseTime = realRoute.duration;
     
+    const transitionMatrix = this.getTransitionMatrix(supplierCoord, constructionCoord, hour, season);
     const results = [];
     
     for (let sim = 0; sim < numSimulations; sim++) {
@@ -142,8 +147,10 @@ export class TransportEstimator {
         min: Math.round(avgTime - 1.96 * stdDev),
         max: Math.round(avgTime + 1.96 * stdDev)
       },
-      distance: Math.round(distance * 100) / 100,
-      simulations: numSimulations
+      distance: distance,
+      simulations: numSimulations,
+      realRoute: realRoute,
+      baseTimeOSRM: baseTime
     };
   }
 
@@ -190,12 +197,12 @@ export class TransportEstimator {
   }
 
   // Estimer les fenêtres de livraison optimales
-  findOptimalDeliveryWindow(supplierCoord, constructionCoord, deliveryDate, season = 'dry', targetArrivalTime = null) {
+  async findOptimalDeliveryWindow(supplierCoord, constructionCoord, deliveryDate, season = 'dry', targetArrivalTime = null) {
     const windows = [];
     
     // Tester différentes heures de départ
     for (let hour = 6; hour <= 18; hour++) {
-      const estimation = this.simulateTransportTime(
+      const estimation = await this.simulateTransportTime(
         supplierCoord, 
         constructionCoord, 
         hour, 

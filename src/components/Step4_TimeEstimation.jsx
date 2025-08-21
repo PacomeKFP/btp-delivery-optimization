@@ -34,7 +34,7 @@ const Step4_TimeEstimation = ({ onNext, onPrevious, initialData = {} }) => {
       const constructionCoord = [constructionSite.lat, constructionSite.lng];
       
       // Estimation pour différentes heures
-      const timeEstimation = transportEstimator.simulateTransportTime(
+      const timeEstimation = await transportEstimator.simulateTransportTime(
         supplierCoord, 
         constructionCoord, 
         8, // 8h du matin par défaut
@@ -43,7 +43,7 @@ const Step4_TimeEstimation = ({ onNext, onPrevious, initialData = {} }) => {
       );
       
       // Fenêtres de livraison optimales
-      const deliveryWindows = transportEstimator.findOptimalDeliveryWindow(
+      const deliveryWindows = await transportEstimator.findOptimalDeliveryWindow(
         supplierCoord,
         constructionCoord,
         deliveryDate,
