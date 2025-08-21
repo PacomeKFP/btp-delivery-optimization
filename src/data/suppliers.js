@@ -43,7 +43,7 @@ export const suppliersData = [
     location: 'Nouvelle route Mvan',
     coordinates: [3.8280, 11.4821],
     stock: 350,
-    color: '#3b82f6' // Blue variant
+    color: '#86f63bff' // Blue variant
   },
   {
     id: 'F4',
@@ -58,7 +58,7 @@ export const suppliersData = [
     location: 'Nomayos',
     coordinates: [3.8780, 11.5421],
     stock: 800,
-    color: '#f97316' // Orange variant
+    color: '#f916c0ff' // Orange variant
   }
 ];
 
