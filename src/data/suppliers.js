@@ -12,7 +12,7 @@ export const suppliersData = [
     quality: 'ISO 9001, Certifications sur les matériaux',
     location: 'Etoa Maki',
     coordinates: [3.8480, 11.5021], // Yaoundé area
-    stock: 500, // m3 available
+    stock: 76, // m3 available
     color: '#2563eb' // Blue
   },
   {
@@ -27,7 +27,7 @@ export const suppliersData = [
     quality: 'ISO 9001, Certifications sur les matériaux',
     location: 'Olembé',
     coordinates: [3.8680, 11.5221],
-    stock: 400,
+    stock: 56,
     color: '#ea580c' // Orange
   },
   {
@@ -42,7 +42,7 @@ export const suppliersData = [
     quality: 'ISO 9001, Certifications sur les matériaux',
     location: 'Nouvelle route Mvan',
     coordinates: [3.8280, 11.4821],
-    stock: 350,
+    stock: 66,
     color: '#86f63bff' // Blue variant
   },
   {
@@ -57,7 +57,7 @@ export const suppliersData = [
     quality: 'ISO 9001, Certifications sur les matériaux',
     location: 'Nomayos',
     coordinates: [3.8780, 11.5421],
-    stock: 800,
+    stock: 86,
     color: '#f916c0ff' // Orange variant
   }
 ];
