@@ -49,7 +49,7 @@ const Step3_Evaluation = ({ onNext, onPrevious, initialData = {} }) => {
       <div className="text-center mb-8">
         <TrendingUp className="w-16 h-16 text-primary-600 mx-auto mb-4" />
         <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          Évaluation des Fournisseurs
+          Évaluation de la fiabilité des fournisseurs
         </h2>
         <p className="text-gray-600">
           Analyse multicritère selon la méthode AHP (Analytic Hierarchy Process)

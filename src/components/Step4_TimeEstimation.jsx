@@ -79,10 +79,12 @@ const Step4_TimeEstimation = ({ onNext, onPrevious, initialData = {} }) => {
   const prepareTimeChartData = () => {
     if (!selectedSupplier || !timeEstimations[selectedSupplier]) return [];
     
+    // Prendre un échantillon des fenêtres pour le graphique (toutes les 30min pour lisibilité)
     return timeEstimations[selectedSupplier].deliveryWindows.allWindows
-      .sort((a, b) => a.departureHour - b.departureHour)
+      .filter((window, index) => index % 6 === 0) // Toutes les 6ème (6 x 5min = 30min)
+      .sort((a, b) => a.departureTime - b.departureTime)
       .map(window => ({
-        hour: `${window.departureHour}h`,
+        hour: `${window.departureHour}h${window.departureMinute.toString().padStart(2, '0')}`,
         temps: window.averageTime,
         min: window.minTime,
         max: window.maxTime
@@ -126,6 +128,7 @@ const Step4_TimeEstimation = ({ onNext, onPrevious, initialData = {} }) => {
                   <div>• État du trafic (Fluide/Dense/Embouteillé)</div>
                   <div>• Géolocalisation (zone urbaine, zone rurale)</div>
                   <div>• Conditions météorologiques (sec/pluvieux)</div>
+                  <div>• État de dégradation de la route</div>
                   <div>• Distance réelle</div>
                 </div>
               </div>
@@ -196,7 +199,7 @@ const Step4_TimeEstimation = ({ onNext, onPrevious, initialData = {} }) => {
                   <div className="text-sm text-gray-600 space-y-1">
                     <div>Distance: {data.distance} km</div>
                     <div>Temps: {formatTime(data.averageTime)}</div>
-                    <div>Optimal: {data.optimalDeparture.departureHour}h</div>
+                    <div>Optimal: {data.optimalDeparture.departureHour}h{data.optimalDeparture.departureMinute?.toString().padStart(2, '0') || '00'}</div>
                   </div>
                 </button>
               ))}
@@ -219,9 +222,9 @@ const Step4_TimeEstimation = ({ onNext, onPrevious, initialData = {} }) => {
                   <div className="text-center p-4 bg-blue-50 rounded-lg">
                     <Clock className="w-8 h-8 text-blue-600 mx-auto mb-2" />
                     <div className="text-2xl font-bold text-blue-700">
-                      {formatTime(timeEstimations[selectedSupplier].averageTime)}
+                      {formatTime(timeEstimations[selectedSupplier].optimalDeparture.averageTime || timeEstimations[selectedSupplier].averageTime)}
                     </div>
-                    <div className="text-sm text-blue-600">Temps moyen</div>
+                    <div className="text-sm text-blue-600">Temps optimal</div>
                   </div>
                   
                   <div className="text-center p-4 bg-green-50 rounded-lg">
@@ -235,7 +238,7 @@ const Step4_TimeEstimation = ({ onNext, onPrevious, initialData = {} }) => {
                   <div className="text-center p-4 bg-orange-50 rounded-lg">
                     <Calendar className="w-8 h-8 text-orange-600 mx-auto mb-2" />
                     <div className="text-2xl font-bold text-orange-700">
-                      {timeEstimations[selectedSupplier].optimalDeparture.departureHour}h
+                      {timeEstimations[selectedSupplier].optimalDeparture.departureHour}h{timeEstimations[selectedSupplier].optimalDeparture.departureMinute?.toString().padStart(2, '0') || '00'}
                     </div>
                     <div className="text-sm text-orange-600">Départ optimal</div>
                   </div>

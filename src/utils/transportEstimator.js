@@ -200,21 +200,25 @@ export class TransportEstimator {
   async findOptimalDeliveryWindow(supplierCoord, constructionCoord, deliveryDate, season = 'dry', targetArrivalTime = null) {
     const windows = [];
     
-    // Tester différentes heures de départ
-    for (let hour = 6; hour <= 18; hour++) {
+    // Tester différentes heures de départ avec granularité de 5 minutes
+    for (let time = 6.0; time <= 18.0; time += 1/12) { // 1/12 heure = 5 minutes
       const estimation = await this.simulateTransportTime(
         supplierCoord, 
         constructionCoord, 
-        hour, 
+        time, 
         season, 
-        50 // Moins de simulations pour plus de rapidité
+        30 // Réduire simulations pour compenser le nombre accru de créneaux
       );
       
-      const arrivalHour = hour + Math.ceil(estimation.averageTime / 60);
+      const arrivalTime = time + estimation.averageTime / 60;
       
       windows.push({
-        departureHour: hour,
-        arrivalHour: arrivalHour,
+        departureTime: time,
+        departureHour: Math.floor(time),
+        departureMinute: Math.round((time % 1) * 60),
+        arrivalTime: arrivalTime,
+        arrivalHour: Math.floor(arrivalTime),
+        arrivalMinute: Math.round((arrivalTime % 1) * 60),
         ...estimation
       });
     }
@@ -229,7 +233,7 @@ export class TransportEstimator {
       // Trouver le créneau qui arrive le plus proche de l'heure cible
       let minDifference = Infinity;
       for (const window of windows) {
-        const arrivalDecimal = window.arrivalHour;
+        const arrivalDecimal = window.arrivalTime;
         const difference = Math.abs(arrivalDecimal - targetDecimal);
         
         if (difference < minDifference) {
@@ -261,12 +265,12 @@ export class TransportEstimator {
       recommendations.push(`Heure de départ calculée pour arriver vers ${targetArrivalTime}`);
     }
     
-    if (best.departureHour <= 7) {
+    if (best.departureTime <= 7) {
       recommendations.push("Départ tôt le matin recommandé pour éviter les embouteillages");
     }
     
-    if (best.departureHour >= 10 && best.departureHour <= 14) {
-      recommendations.push("Créneau en milieu de journée optimal");
+    if (best.departureTime >= 10 && best.departureTime <= 14) {
+      recommendations.push("Départ en milieu de journée recommandé pour éviter les embouteillages");
     }
     
     const timeSaved = worst.averageTime - best.averageTime;
