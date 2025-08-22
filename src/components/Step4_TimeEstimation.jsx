@@ -79,16 +79,35 @@ const Step4_TimeEstimation = ({ onNext, onPrevious, initialData = {} }) => {
   const prepareTimeChartData = () => {
     if (!selectedSupplier || !timeEstimations[selectedSupplier]) return [];
     
-    // Prendre un échantillon des fenêtres pour le graphique (toutes les 30min pour lisibilité)
-    return timeEstimations[selectedSupplier].deliveryWindows.allWindows
-      .filter((window, index) => index % 6 === 0) // Toutes les 6ème (6 x 5min = 30min)
+    const selectedData = timeEstimations[selectedSupplier];
+    const optimalDeparture = selectedData.optimalDeparture;
+    
+    // Afficher tous les points (toutes les 5 minutes)
+    return selectedData.deliveryWindows.allWindows
       .sort((a, b) => a.departureTime - b.departureTime)
-      .map(window => ({
-        hour: `${window.departureHour}h${window.departureMinute.toString().padStart(2, '0')}`,
-        temps: window.averageTime,
-        min: window.minTime,
-        max: window.maxTime
-      }));
+      .map(window => {
+        // Corriger le format d'heure : convertir 6h60 en 7h00
+        let hours = window.departureHour;
+        let minutes = window.departureMinute || 0;
+        
+        // Si les minutes sont >= 60, ajuster l'heure
+        if (minutes >= 60) {
+          hours += Math.floor(minutes / 60);
+          minutes = minutes % 60;
+        }
+        
+        // Marquer le point optimal
+        const isOptimal = window.departureHour === optimalDeparture.departureHour && 
+                         window.departureMinute === optimalDeparture.departureMinute;
+        
+        return {
+          hour: `${hours}h${minutes.toString().padStart(2, '0')}`,
+          temps: window.averageTime,
+          min: window.minTime,
+          max: window.maxTime,
+          isOptimal: isOptimal
+        };
+      });
   };
 
   const prepareComparisonData = () => {
@@ -198,8 +217,9 @@ const Step4_TimeEstimation = ({ onNext, onPrevious, initialData = {} }) => {
                   </div>
                   <div className="text-sm text-gray-600 space-y-1">
                     <div>Distance: {data.distance} km</div>
-                    <div>Temps: {formatTime(data.averageTime)}</div>
-                    <div>Optimal: {data.optimalDeparture.departureHour}h{data.optimalDeparture.departureMinute?.toString().padStart(2, '0') || '00'}</div>
+                    <div>Temps estimé: {formatTime(data.optimalDeparture.averageTime || data.averageTime)}</div>
+                    <div>Départ optimal: {data.optimalDeparture.departureHour}h{data.optimalDeparture.departureMinute?.toString().padStart(2, '0') || '00'}</div>
+                    <div>Arrivée estimée: {data.optimalDeparture.arrivalHour}h{data.optimalDeparture.arrivalMinute?.toString().padStart(2, '0') || '00'}</div>
                   </div>
                 </button>
               ))}
@@ -245,38 +265,129 @@ const Step4_TimeEstimation = ({ onNext, onPrevious, initialData = {} }) => {
                 </div>
 
                 {/* Time variation chart */}
-                <div className="mb-6">
-                  <h5 className="font-medium text-gray-700 mb-3">Variation du temps selon l'heure de départ</h5>
-                  <div className="h-64">
+                <div className="mb-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100">
+                  <h5 className="font-semibold text-gray-800 mb-4 flex items-center">
+                    <Clock className="w-5 h-5 mr-2 text-blue-600" />
+                    Variation du temps selon l'heure de départ
+                  </h5>
+                  <div className="h-80 bg-white rounded-lg p-4 shadow-sm">
                     <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={prepareTimeChartData()}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="hour" />
-                        <YAxis />
-                        <Tooltip formatter={(value) => [`${value} min`, 'Temps']} />
+                      <LineChart 
+                        data={prepareTimeChartData()}
+                        margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+                      >
+                        <defs>
+                          <linearGradient id="timeGradient" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3}/>
+                            <stop offset="95%" stopColor="#3B82F6" stopOpacity={0.05}/>
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid 
+                          stroke="#E5E7EB" 
+                          strokeOpacity={0.8}
+                        />
+                        <XAxis 
+                          dataKey="hour"
+                          axisLine={false}
+                          tickLine={false}
+                          tick={{ fontSize: 12, fill: '#6B7280' }}
+                          interval={11}
+                        />
+                        <YAxis 
+                          axisLine={false}
+                          tickLine={false}
+                          tick={{ fontSize: 12, fill: '#6B7280' }}
+                          label={{ 
+                            value: 'Temps (min)', 
+                            angle: -90, 
+                            position: 'insideLeft',
+                            style: { textAnchor: 'middle', fill: '#6B7280', fontSize: '12px' }
+                          }}
+                        />
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: '#1F2937', 
+                            border: 'none', 
+                            borderRadius: '8px',
+                            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                            color: 'white'
+                          }}
+                          labelStyle={{ color: '#F3F4F6' }}
+                          formatter={(value, name) => [
+                            `${value} min`, 
+                            'Temps de trajet'
+                          ]}
+                          labelFormatter={(label) => `Départ à ${label}`}
+                        />
                         <Line 
                           type="monotone" 
                           dataKey="temps" 
                           stroke="#3B82F6" 
-                          strokeWidth={2}
-                          dot={{ fill: '#3B82F6', strokeWidth: 2, r: 4 }}
+                          strokeWidth={2.5}
+                          fill="url(#timeGradient)"
+                          dot={(props) => {
+                            const { payload } = props;
+                            if (payload?.isOptimal) {
+                              return (
+                                <circle
+                                  cx={props.cx}
+                                  cy={props.cy}
+                                  r={6}
+                                  fill="#10B981"
+                                  stroke="#FFFFFF"
+                                  strokeWidth={3}
+                                />
+                              );
+                            }
+                            return null;
+                          }}
+                          activeDot={{ 
+                            r: 6, 
+                            fill: '#1D4ED8',
+                            stroke: '#FFFFFF',
+                            strokeWidth: 3
+                          }}
                         />
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
+                  
+                  {/* Légende informative */}
+                  <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
+                    <div className="flex items-center space-x-4">
+                      <div className="flex items-center">
+                        <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                        <span>Temps de trajet estimé</span>
+                      </div>
+                      <div className="flex items-center">
+                        <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                        <span>Départ optimal</span>
+                      </div>
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      Simulation basée sur {timeEstimations[selectedSupplier]?.simulations || 100} scénarios
+                    </div>
+                  </div>
                 </div>
 
-                {/* Recommendations */}
-                {timeEstimations[selectedSupplier].deliveryWindows.recommendations.length > 0 && (
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                    <h5 className="font-medium text-yellow-800 mb-2">Recommandations :</h5>
-                    <ul className="text-yellow-700 text-sm space-y-1">
-                      {timeEstimations[selectedSupplier].deliveryWindows.recommendations.map((rec, i) => (
-                        <li key={i}>• {rec}</li>
-                      ))}
-                    </ul>
+                {/* Informations de livraison */}
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <h5 className="font-medium text-blue-800 mb-2 flex items-center">
+                    <Calendar className="w-4 h-4 mr-2" />
+                    Livraison demandée
+                  </h5>
+                  <div className="text-blue-700 text-sm space-y-1">
+                    <div>• Date: {new Date(initialData.deliveryDate).toLocaleDateString('fr-FR', { 
+                      weekday: 'long',
+                      day: 'numeric', 
+                      month: 'long', 
+                      year: 'numeric' 
+                    })}</div>
+                    {initialData.arrivalTime && (
+                      <div>• Heure souhaitée: {initialData.arrivalTime}</div>
+                    )}
                   </div>
-                )}
+                </div>
               </div>
             )}
           </div>
