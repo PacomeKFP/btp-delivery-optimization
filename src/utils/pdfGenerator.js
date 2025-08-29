@@ -248,7 +248,7 @@ export class PDFGenerator {
       this.pdf.setFont('helvetica', 'normal');
       
       // À gauche : informations de génération
-      this.pdf.text('Simulateur Logistique BTP - Générée avec Claude Code', this.margin, this.pageHeight - 8);
+      this.pdf.text('Simulateur Logistique BTP', this.margin, this.pageHeight - 8);
       
       // À droite : numéro de page
       this.pdf.text(`Page ${i} sur ${pageCount}`, this.pageWidth - this.margin - 20, this.pageHeight - 8);
@@ -295,16 +295,21 @@ export async function generateSimulationReport(simulationData) {
     { value: `${simulationData.demand} m³`, label: 'Demande' },
     { value: `${simulationData.selectedSolution.satisfactionRate.toFixed(1)}%`, label: 'Satisfaction' },
     { value: `${simulationData.selectedSolution.combination.length}`, label: 'Fournisseurs' },
-    { value: `${Math.round(simulationData.selectedSolution.maxDeliveryTime)} min`, label: 'Temps max' }
+    { value: `${Math.round(simulationData.selectedSolution.maxDeliveryTime)} min`, label: 'Temps max \n (Tout fournisseurs confondus)' }
   ];
   
   generator.addKeyMetrics(keyMetrics);
   
+  const formatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "XAF",
+  minimumFractionDigits: 0,
+});
   // Informations du projet
   generator.addText(`Matériau demandé : ${simulationData.materialType}`, 11, true);
   generator.addText(`Date de livraison souhaitée : ${simulationData.deliveryDate}`, 11, false);
   generator.addText(`Heure d'arrivée souhaitée : ${simulationData.arrivalTime}`, 11, false);
-  generator.addText(`Coût total estimé : ${new Intl.NumberFormat('fr-FR').format(simulationData.selectedSolution.totalCost)} FCFA`, 11, true);
+  generator.addText(`Coût total estimé : ${formatter.format(simulationData.selectedSolution.totalCost)}`, 11, true);
   
   // Analyse des fournisseurs
   generator.addSection('FOURNISSEURS SÉLECTIONNÉS');

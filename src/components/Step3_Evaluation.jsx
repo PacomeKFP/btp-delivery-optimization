@@ -147,7 +147,7 @@ const Step3_Evaluation = ({ onNext, onPrevious, initialData = {} }) => {
                       </div>
                       <div className="text-right">
                         <div className="text-2xl font-bold text-primary-600">
-                          {(score.totalScore * 100).toFixed(1)}%
+                          {(score.totalScore).toFixed(2)}
                         </div>
                         <div className="flex items-center text-sm text-gray-600">
                           <Star className="w-4 h-4 mr-1" />

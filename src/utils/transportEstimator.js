@@ -91,7 +91,7 @@ export class TransportEstimator {
 
     // Zone urbaine
     const period = this.determinePeriod(hour);
-    return this.transitionMatrices[`urban_${season}_${period}`];
+    return this.transitionMatrices[`urban_dry_peak`];
   }
 
   // Simulation Monte Carlo pour estimer le temps de trajet avec routes réelles

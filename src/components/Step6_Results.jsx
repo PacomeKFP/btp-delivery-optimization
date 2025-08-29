@@ -26,7 +26,7 @@ const Step6_Results = ({ onRestart, initialData = {} }) => {
       name: supplier.name,
       value: supplier.allocatedQuantity,
       fill: supplier.color,
-      percentage: ((supplier.allocatedQuantity / selectedSolution.totalQuantity) * 100).toFixed(1)
+      percentage: ((supplier.allocatedQuantity / selectedSolution.totalQuantity)).toFixed(2)
     }));
   };
 
@@ -142,10 +142,10 @@ const Step6_Results = ({ onRestart, initialData = {} }) => {
                 <div className="text-2xl font-bold">{formatTime(selectedSolution.maxDeliveryTime)}</div>
                 <div className="text-green-100 text-sm">Temps max</div>
               </div>
-              <div>
-                <div className="text-2xl font-bold">{(selectedSolution.globalScore * 100).toFixed(1)}%</div>
+              {/* <div>
+                <div className="text-2xl font-bold">{(selectedSolution.globalScore).toFixed(2)}</div>
                 <div className="text-green-100 text-sm" title="Score composite basé sur la qualité AHP, temps de transport et coût">Score global ℹ️</div>
-              </div>
+              </div> */}
             </div>
           </div>
           
@@ -222,7 +222,7 @@ const Step6_Results = ({ onRestart, initialData = {} }) => {
                 <div className="flex items-center">
                   <Clock className="w-8 h-8 text-orange-600 mr-3" />
                   <div>
-                    <div className="text-2xl font-bold text-orange-700">{formatTime(selectedSolution.avgDeliveryTime)}</div>
+                    <div className="text-2xl font-bold text-orange-700">{formatTime(Math.floor(selectedSolution).avgDeliveryTime)}</div>
                     <div className="text-orange-600">Temps moyen</div>
                   </div>
                 </div>

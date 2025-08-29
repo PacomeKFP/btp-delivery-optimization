@@ -209,7 +209,7 @@ const Step5_Optimization = ({ onNext, onPrevious, initialData = {} }) => {
                 </h3>
                 <div className="text-right">
                   <div className="text-2xl font-bold text-primary-600">
-                    {(currentSolution.globalScore * 100).toFixed(1)}%
+                    {(currentSolution.globalScore).toFixed(2)}
                   </div>
                   <div className="text-sm text-gray-600">Score global</div>
                 </div>
