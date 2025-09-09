@@ -222,7 +222,7 @@ const Step6_Results = ({ onRestart, initialData = {} }) => {
                 <div className="flex items-center">
                   <Clock className="w-8 h-8 text-orange-600 mr-3" />
                   <div>
-                    <div className="text-2xl font-bold text-orange-700">{formatTime(Math.floor(selectedSolution).avgDeliveryTime)}</div>
+                    <div className="text-2xl font-bold text-orange-700">{formatTime(selectedSolution.avgDeliveryTime)}</div>
                     <div className="text-orange-600">Temps moyen</div>
                   </div>
                 </div>
