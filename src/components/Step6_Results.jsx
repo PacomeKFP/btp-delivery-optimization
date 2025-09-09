@@ -16,7 +16,7 @@ const Step6_Results = ({ onRestart, initialData = {} }) => {
   };
 
   const formatTime = (minutes) => {
-    const hours = Math.floor(minutes / 60).to fixed(2);
+    const hours = Math.floor(minutes / 60).toFixed(2);
     const mins = minutes % 60;
     return hours > 0 ? `${hours}h ${mins}min` : `${mins}min`;
   };
