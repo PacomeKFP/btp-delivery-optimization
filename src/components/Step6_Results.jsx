@@ -16,9 +16,9 @@ const Step6_Results = ({ onRestart, initialData = {} }) => {
   };
 
   const formatTime = (minutes) => {
-    const hours = Math.floor(minutes / 60).toFixed(2);
+    const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
-    return hours > 0 ? `${hours}h ${mins}min` : `${mins}min`;
+    return hours > 0 ? `${hours}h ${mins.toFixed(2)}min` : `${mins.toFixed(2)}min`;
   };
 
   const preparePieData = () => {
